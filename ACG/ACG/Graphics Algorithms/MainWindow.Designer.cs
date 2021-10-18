@@ -45,7 +45,7 @@
             // 
             // _drawTimer
             // 
-            this._drawTimer.Interval = 5;
+            this._drawTimer.Interval = 20;
             this._drawTimer.Tick += new System.EventHandler(this._drawTimer_Tick);
             // 
             // MainWindow

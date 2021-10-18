@@ -15,7 +15,6 @@ namespace GraphicsModeler.MainWindow
 {
     public partial class MainWindow : Form
     {
-        private Vector3 translation;
         private ObjectFileParser parser;
         private Model model;
 
@@ -24,58 +23,52 @@ namespace GraphicsModeler.MainWindow
             InitializeComponent();
             _canvas.Size = this.ClientSize;
             _canvas.Image = new Bitmap(_canvas.Width, _canvas.Height);
-            parser = new ObjectFileParser(@"C:\Users\Kamar\Desktop\Airplane.obj");
+            parser = new ObjectFileParser(@"C:\Users\Kamar\Desktop\gun.obj");
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            translation.X = _canvas.Width / 2;
-            translation.Y = _canvas.Height / 2;
             model = parser.GetModel();
+            model.Translation = new Vector3(_canvas.Width / 2, _canvas.Height / 2, 0);
+            model.ScaleFactor = 150f;
+            
             _drawTimer.Enabled = true;
-            model.Vertexes.Translate(translation);
-            model.Vertexes.ScaleVectors(150f, translation);
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Down)
             {
-                model.Vertexes.RotateVectors(new Vector3(0.2f, 0f, 0f), translation);
+                model.Rotation.X += 0.2f;
             }
             else if (e.KeyCode == Keys.Up)
             {
-                model.Vertexes.RotateVectors(new Vector3(-0.2f, 0f, 0f), translation);
-            }
-            else if (e.KeyCode == Keys.D)
-            {
-                model.Vertexes.RotateVectors(new Vector3(0f, 0f, 0.2f), translation);
-            }
-            else if (e.KeyCode == Keys.A)
-            {
-                model.Vertexes.RotateVectors(new Vector3(0f, 0f, -0.2f), translation);
-            }
-            else if (e.KeyCode == Keys.Right)
-            {
-                model.Vertexes.RotateVectors(new Vector3(0f, 0.2f, 0f), translation);
-            }
-            else if (e.KeyCode == Keys.Left)
-            {
-                model.Vertexes.RotateVectors(new Vector3(0f, -0.2f, 0f), translation);
-            }
-            else if (e.KeyCode == Keys.W)
-            {
-                model.Vertexes.ScaleVectors(1.2f, translation);
+                model.Rotation.X -= 0.2f;
             }
             else if (e.KeyCode == Keys.S)
             {
-                model.Vertexes.ScaleVectors(0.8f, translation);
+                model.ScaleFactor -= 2f;
             }
-
-
-
-
-
+            else if (e.KeyCode == Keys.W)
+            {
+                model.ScaleFactor += 2f;
+            }
+            else if (e.KeyCode == Keys.A)
+            {
+                model.Rotation.Z -= 0.2f;
+            }
+            else if (e.KeyCode == Keys.D)
+            {
+                model.Rotation.Z += 0.2f;
+            }
+            else if (e.KeyCode == Keys.Left)
+            {
+                model.Rotation.Y -= 0.2f;
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                model.Rotation.Y += 0.2f;
+            }
         }
 
 
@@ -84,9 +77,7 @@ namespace GraphicsModeler.MainWindow
             _canvas.Size = this.ClientSize;
             if (model != null)
             {
-                model.Vertexes.Translate(new Vector3(-translation.X, -translation.Y, -translation.Z));
-                translation = new Vector3(_canvas.Width / 2, _canvas.Height / 2, 0);
-                model.Vertexes.Translate(translation);
+                model.Translation = new Vector3(_canvas.Width / 2, _canvas.Height / 2, 0);
             }
         }
 
@@ -99,10 +90,7 @@ namespace GraphicsModeler.MainWindow
 
         private void _canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                model.Vertexes.RotateVectors(new Vector3(0.2f, 0f, 0f), translation);
-            }
+
         }
     }
 }
